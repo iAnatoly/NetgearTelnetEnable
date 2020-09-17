@@ -43,9 +43,9 @@
 #include <netinet/in.h>
 #include <netdb.h>
 
+#include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
-//#include <process.h>
 #include <string.h>
 
 #include "md5.h"

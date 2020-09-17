@@ -47,6 +47,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "md5.h"
 #include "blowfish.h"
@@ -131,6 +132,17 @@ int EncodeString(BLOWFISH_CTX *ctx,char *pInput,char *pOutput, int lSize)
   return lCount;
 }
 
+char* SanitizeMac(char* mac)
+{
+    int j = 0;
+    for (int i=0; i<strlen(mac); i++) {
+        if (mac[i]==':') continue;
+        mac[j++] = toupper(mac[i]);
+    }
+    mac[j] = 0;
+    return mac;
+}
+
 
 int fill_payload(int argc, char * input[])
 {
@@ -141,12 +153,13 @@ int fill_payload(int argc, char * input[])
 
   memset(&payload, 0, sizeof(payload));
   // NOTE: struct has .mac behind .signature and is filled here
-  strcpy(payload.mac, input[2]);
+  strcpy(payload.mac, SanitizeMac(input[2]));
   strcpy(payload.username, input[3]);
 
   if (argc==5)
     strcpy(payload.password, input[4]);
 
+  printf("Using the following parameters:\n\tUsername: '%s'\n\tPassword: '%s'\n\tMAC: '%s'", payload.username, payload.password, payload.mac);
 
   MD5Init(&MD);
   MD5Update(&MD,payload.mac,0x70);

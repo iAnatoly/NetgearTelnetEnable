@@ -179,8 +179,7 @@ int fill_payload(int argc, char * input[])
   // dj: a better fix is to use strncpy to avoid the stomping in the 1st place
   //  strcat(payload.signature, input[2]);
 
-  if (argc==5)
-    strncat(secret_key,input[4],sizeof(secret_key) - strlen(secret_key) - 1);
+  strncat(secret_key,input[4],sizeof(secret_key) - strlen(secret_key) - 1);
 
   Blowfish_Init(&ctx,secret_key,strlen(secret_key));
 
@@ -201,13 +200,14 @@ int main(int argc, char * argv[])
     usage(argv[0]);
 
   datasize = fill_payload(argc, argv);
+  char * host = argv[1];
 
-  int sock = socket_connect(argv[1],PORT);
+  int sock = socket_connect(host,PORT);
   write(sock, output_buf, datasize);
   close(sock);
 
-  printf("\nPayload has been sent to Netgear router.\n"
-    "Telnet should be enabled.\n\n");
+  printf("\nPayload has been sent to Netgear router (%s:%d).\n"
+    "Telnet should be enabled.\n\n",host,PORT);
 
   return 0;
 }

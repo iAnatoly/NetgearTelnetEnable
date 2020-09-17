@@ -67,9 +67,10 @@ struct PAYLOAD
 
 void usage(char * progname)
 {
-  printf("\nVersion: 0.4, 2015/02/12\n");
-  printf("Modified to work with newer Negear routers R7000 R7500 by insanid\n");
-  printf("\nUsage:\n%s <host ip> <host mac> <user name> <password>\n\n",progname);
+  printf("\nVersion: 0.4, 2015/02/12\n"
+    "Modified to work with newer Negear routers R7000 R7500 by insanid\n\n"
+    "Usage:\n%s <host ip> <host mac> <user name> <password>\n\n",
+    progname);
   exit(-1);
 }
 
@@ -159,7 +160,11 @@ int fill_payload(int argc, char * input[])
   if (argc==5)
     strcpy(payload.password, input[4]);
 
-  printf("Using the following parameters:\n\tUsername: '%s'\n\tPassword: '%s'\n\tMAC: '%s'", payload.username, payload.password, payload.mac);
+  printf("Using the following parameters:\n"
+    "\tUsername: '%s'\n"
+    "\tPassword: '%s'\n"
+    "\tMAC: '%s'", 
+    payload.username, payload.password, payload.mac);
 
   MD5Init(&MD);
   MD5Update(&MD,payload.mac,0x70);
@@ -201,8 +206,8 @@ int main(int argc, char * argv[])
   write(sock, output_buf, datasize);
   close(sock);
 
-  printf("\nPayload has been sent to Netgear router.\n");
-  printf("Telnet should be enabled.\n\n");
+  printf("\nPayload has been sent to Netgear router.\n"
+    "Telnet should be enabled.\n\n");
 
   return 0;
 }
